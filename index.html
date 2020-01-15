@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <title>Mandarin Trainer</title>
+</head>
+<body>
+    
+    <div class="container" id="app">
+        <div class="row text-center my-3">            
+            <div class="col">
+                <h3 class="display-3">Mandarin Trainer</h3>
+                <h1 class="display-1 my-3">{{correctAnswer.character}}</h1>
+                <button v-if="sessionFinished" @click="newQuiz" class="btn btn-primary btn-lg">Next Question</button>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-6 display-4 my-2 py-3 border border-dark rounded"
+                v-for="word in currentWordChoices" :key="word.pinyin" v-bind:class="{'bg-success' : word.isCorrect, 'bg-danger' : word.isCorrect == false}">
+                    <a href="#" @click.prevent="grade(word)">{{word.pinyin}}</a>                    
+                    {{word.isCorrect ? 'Correct!' : ''}}
+                    {{word.isCorrect == false ? 'Wrong!' : ''}}
+                    {{word.isCorrect == null ? '' : ''}}
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="app.js"></script>
+
+</body>
+</html>
