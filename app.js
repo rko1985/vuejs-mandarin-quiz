@@ -21,7 +21,7 @@ new Vue({
                 isCorrect: null
             },
             {
-                character: '昨天',
+                character: '明天',
                 pinyin: 'míngtiān',
                 english: 'tomorrow',
                 isCorrect: null
@@ -60,7 +60,11 @@ new Vue({
     randomArray: [], //randomized order of wordlist
     currentWordChoices: [],
     correctAnswer: {},
-    sessionFinished: false
+    sessionFinished: false,
+    progress: 0,
+    totalCorrect: 0,
+    answeredWrong: false,
+    isPinyin: true
     },
     methods: {
         generateRandomChoices(){           
@@ -74,15 +78,23 @@ new Vue({
             }
             //choose random word from word choices for the quiz question
             this.correctAnswer = this.currentWordChoices[(Math.floor(Math.random()*this.currentWordChoices.length))]         
+            //chooses if question will be in pinyin or english at random
+            this.randomPinyin();
         },
         grade(choice){
             if(choice == this.correctAnswer){
                 var indexOfAnswer = this.currentWordChoices.indexOf(choice)
                 this.currentWordChoices[indexOfAnswer].isCorrect = true
+                this.progress++
+                if(this.answeredWrong === false){
+                    this.totalCorrect++
+                }
+                this.answeredWrong = false;
                 this.sessionFinished = true;
             } else {
                 var indexOfAnswer = this.currentWordChoices.indexOf(choice)
-                this.currentWordChoices[indexOfAnswer].isCorrect = false
+                this.currentWordChoices[indexOfAnswer].isCorrect = false;
+                this.answeredWrong = true;
             }
         },
         newQuiz(){
@@ -105,9 +117,22 @@ new Vue({
                 return Math.random() - 0.5;
             });
             this.randomArray = ar;
+        },
+        randomPinyin(){
+            this.isPinyin = (Math.random() >= 0.5);
+        }
+    },
+    computed: {
+        testFinished(){
+            if(this.progress >= 10){
+                return true
+            } else {
+                return false
+            }
         }
     },
     created: function(){
         this.generateRandomChoices()
     }
 })
+
