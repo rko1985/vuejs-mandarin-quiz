@@ -1,3 +1,4 @@
+
 new Vue({
     el: '#app',
     data: {
@@ -17,7 +18,7 @@ new Vue({
             {
                 character: '今天',
                 pinyin: 'jīntiān',
-                english: 'week',
+                english: 'today',
                 isCorrect: null
             },
             {
@@ -63,6 +64,7 @@ new Vue({
     sessionFinished: false,
     progress: 0,
     totalCorrect: 0,
+    totalQuestions: 10,
     answeredWrong: false,
     isPinyin: true
     },
@@ -84,10 +86,12 @@ new Vue({
         grade(choice){
             if(choice == this.correctAnswer){
                 var indexOfAnswer = this.currentWordChoices.indexOf(choice)
-                this.currentWordChoices[indexOfAnswer].isCorrect = true
-                this.progress++
-                if(this.answeredWrong === false){
+                this.currentWordChoices[indexOfAnswer].isCorrect = true;                
+                if(this.answeredWrong === false && this.sessionFinished == false){
                     this.totalCorrect++
+                }
+                if(this.sessionFinished == false){
+                    this.progress++
                 }
                 this.answeredWrong = false;
                 this.sessionFinished = true;
@@ -120,11 +124,22 @@ new Vue({
         },
         randomPinyin(){
             this.isPinyin = (Math.random() >= 0.5);
+        },
+        tryAgain(){
+            this.randomArray = []; 
+            this.currentWordChoices = [];
+            this.correctAnswer = {};
+            this.sessionFinished = false;
+            this.progress = 0;
+            this.totalCorrect = 0;
+            this.answeredWrong = false;
+            this.isPinyin = true;
+            this.newQuiz();
         }
     },
     computed: {
         testFinished(){
-            if(this.progress >= 10){
+            if(this.progress >= this.totalQuestions){
                 return true
             } else {
                 return false

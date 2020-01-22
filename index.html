@@ -5,43 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
+    
 
     <title>Mandarin Quiz</title>
 </head>
 <body>
     
     <div class="container" id="app">
-        <div class="row text-center my-3">            
-            <div class="col">
-                <h3 class="display-3">Mandarin Trainer</h3>                
-                <h1 class="display-1 my-3">{{correctAnswer.character}}</h1>
-                <h3>{{totalCorrect}} correct</h3>
-                <h3>{{progress}}/10</h3>
-                <div class="progress mb-3">
-                    <div class="progress-bar bg-success" role="progressbar" v-bind:style="{width : progress + '0%'}" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <button v-if="sessionFinished && !testFinished" @click="newQuiz" class="btn btn-primary btn-lg">Next Question</button>
-            </div>
-        </div>
-        <div class="row text-center" v-if="!testFinished">
-            <div class="col-md-6 display-4 my-2 py-3 border border-dark rounded" id="answerSelect"
-                v-for="word in currentWordChoices" :key="word.pinyin" v-bind:class="{'bg-success' : word.isCorrect, 'bg-danger' : word.isCorrect == false}" @click="grade(word)">
-                    <div v-if="isPinyin">{{word.pinyin}}</div>
-                    <div v-else>{{word.english}}</div>
-                    <!-- {{word.isCorrect ? 'Correct!' : ''}}
-                    {{word.isCorrect == false ? 'Wrong!' : ''}}
-                    {{word.isCorrect == null ? '' : ''}} -->
-            </div>
-        </div>
-        <div class="row text-center" v-else>
-            <div class="col">
-                <h1>Total Score: {{totalCorrect}}/10</h1>   
-            </div>                    
-        </div>
-    </div>
+        <div class="card mt-3">
+            <div class="card-header text-center">Mandarin Quiz</div>
 
+            <div class="card-body">
+
+                <div class="row text-center">            
+                    <div class="col">
+                        <h1 class="display-1 my-3">{{correctAnswer.character}}</h1>                
+                        <div class="row">
+                            <div class="col">
+                                <h3 >{{totalCorrect}} correct</h3>
+                                <h3>{{progress}} / {{totalQuestions}}</h3>
+                            </div>
+                        </div>
+                        <div class="progress mb-1">
+                            <div class="progress-bar bg-success" role="progressbar" v-bind:style="{width : progress + '0%'}" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <button v-if="sessionFinished && !testFinished" @click="newQuiz" class="form-control btn btn-primary btn-lg">Next Question</button>
+                    </div>
+                </div>
+
+                <div class="row text-center" v-if="!testFinished">
+                    <div class="col-md-6 display-4 my-1 py-2 border border-dark rounded" id="answerSelect"
+                        v-for="word in currentWordChoices" :key="word.pinyin" v-bind:class="{'bg-success' : word.isCorrect, 'bg-danger' : word.isCorrect == false}" @click="grade(word)">
+                            <div v-if="isPinyin">{{word.pinyin}}</div>
+                            <div v-else>{{word.english}}</div>
+                    </div>
+                </div>
+
+                <div class="row text-center" v-else>
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Total Score: {{totalCorrect}}/{{totalQuestions}}</h3>
+                            </div>
+                            <div class="card-body">
+                                <h3 v-if="(totalCorrect/totalQuestions) >= .8">Good Score!</h3>
+                                <h3 v-else>You need to study more.</h3>
+                                <button @click="tryAgain()" class="btn btn-primary btn-lg form-control my-3">Try Again?</button>
+                            </div>
+                        </div>             
+                    </div>            
+                </div>
+
+            </div>
+        </div>
+
+        
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="app.js"></script>
